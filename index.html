@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>人生倒计时</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      font-family: 'Segoe UI', 'PingFang SC', sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #e94560, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .subtitle {
+      color: #888;
+      margin-bottom: 40px;
+      font-size: 1rem;
+    }
+    
+    .input-section {
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 30px 40px;
+      margin-bottom: 40px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .input-group {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .input-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .input-item label {
+      font-size: 0.9rem;
+      color: #aaa;
+      margin-bottom: 10px;
+    }
+    
+    .input-item input {
+      width: 120px;
+      height: 50px;
+      border: 2px solid rgba(233, 69, 96, 0.5);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      font-size: 1.5rem;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    
+    .input-item input:focus {
+      border-color: #e94560;
+    }
+    
+    .input-item input::placeholder {
+      color: #555;
+    }
+    
+    .result-section {
+      text-align: center;
+    }
+    
+    .main-result {
+      font-size: 4rem;
+      font-weight: bold;
+      color: #e94560;
+      margin-bottom: 5px;
+    }
+    
+    .main-label {
+      font-size: 1.2rem;
+      color: #888;
+      margin-bottom: 30px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 600px;
+    }
+    
+    .stat-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 25px 15px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .stat-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #fff;
+    }
+    
+    .stat-label {
+      font-size: 0.85rem;
+      color: #888;
+      margin-top: 8px;
+    }
+    
+    .stat-card:nth-child(1) .stat-value { color: #e94560; }
+    .stat-card:nth-child(2) .stat-value { color: #ff6b6b; }
+    .stat-card:nth-child(3) .stat-value { color: #ffd93d; }
+    
+    .progress-section {
+      margin-top: 40px;
+      width: 100%;
+      max-width: 500px;
+    }
+    
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      color: #888;
+    }
+    
+    .progress-bar {
+      height: 12px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #e94560, #ff6b6b);
+      border-radius: 6px;
+      transition: width 0.5s ease;
+    }
+    
+    .tips {
+      margin-top: 50px;
+      padding: 20px;
+      background: rgba(233, 69, 96, 0.1);
+      border-radius: 12px;
+      border: 1px solid rgba(233, 69, 96, 0.3);
+      max-width: 500px;
+      text-align: center;
+      color: #e94560;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 600px) {
+      h1 { font-size: 1.8rem; }
+      .main-result { font-size: 2.5rem; }
+      .stats-grid { grid-template-columns: 1fr; gap: 15px; }
+      .input-group { flex-direction: column; gap: 20px; }
+      .input-section { padding: 25px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <h1>⏳ 人生倒计时</h1>
+  <p class="subtitle">珍惜当下，不负韶华</p>
+  
+  <div class="input-section">
+    <div class="input-group">
+      <div class="input-item">
+        <label>当前年龄</label>
+        <input type="number" id="currentAge" placeholder="25" min="0" max="120">
+      </div>
+      <div class="input-item">
+        <label>预计寿命</label>
+        <input type="number" id="deathAge" placeholder="80" min="1" max="150">
+      </div>
+    </div>
+  </div>
+  
+  <div class="result-section">
+    <div class="main-result" id="mainYears">-</div>
+    <div class="main-label">剩余人生</div>
+    
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="daysLeft">-</div>
+        <div class="stat-label">天</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="hoursLeft">-</div>
+        <div class="stat-label">小时</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="minutesLeft">-</div>
+        <div class="stat-label">分钟</div>
+      </div>
+    </div>
+    
+    <div class="progress-section">
+      <div class="progress-label">
+        <span>人生进度</span>
+        <span id="progressPercent">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="tips">
+    💡 记住：今天是你余生中最年轻的一天
+  </div>
+
+  <script>
+    const currentAgeInput = document.getElementById('currentAge');
+    const deathAgeInput = document.getElementById('deathAge');
+    
+    function calculate() {
+      const currentAge = parseInt(currentAgeInput.value) || 0;
+      const deathAge = parseInt(deathAgeInput.value) || 80;
+      
+      if (currentAge <= 0 || deathAge <= currentAge) {
+        document.getElementById('mainYears').textContent = '-';
+        document.getElementById('daysLeft').textContent = '-';
+        document.getElementById('hoursLeft').textContent = '-';
+        document.getElementById('minutesLeft').textContent = '-';
+        document.getElementById('progressPercent').textContent = '0%';
+        document.getElementById('progressFill').style.width = '0%';
+        return;
+      }
+      
+      const yearsLeft = deathAge - currentAge;
+      const daysLeft = Math.floor(yearsLeft * 365.25);
+      const hoursLeft = daysLeft * 24;
+      const minutesLeft = hoursLeft * 60;
+      
+      const progress = (currentAge / deathAge * 100).toFixed(1);
+      
+      document.getElementById('mainYears').textContent = yearsLeft + ' 年';
+      document.getElementById('daysLeft').textContent = daysLeft.toLocaleString();
+      document.getElementById('hoursLeft').textContent = hoursLeft.toLocaleString();
+      document.getElementById('minutesLeft').textContent = minutesLeft.toLocaleString();
+      document.getElementById('progressPercent').textContent = progress + '%';
+      document.getElementById('progressFill').style.width = progress + '%';
+    }
+    
+    currentAgeInput.addEventListener('input', calculate);
+    deathAgeInput.addEventListener('input', calculate);
+    
+    // 默认值
+    currentAgeInput.value = 30;
+    deathAgeInput.value = 80;
+    calculate();
+  </script>
+</body>
+</html>
