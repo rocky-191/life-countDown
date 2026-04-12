@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>测一测你的预计寿命</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      font-family: 'Segoe UI', 'PingFang SC', sans-serif;
+      color: #fff;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .header h1 {
+      font-size: 2rem;
+      background: linear-gradient(90deg, #e94560, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+    
+    .header p {
+      color: #888;
+      font-size: 0.95rem;
+    }
+    
+    .progress-bar {
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      height: 8px;
+      margin-bottom: 30px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #e94560, #ff6b6b);
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+    
+    .question-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 30px;
+      border: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 20px;
+    }
+    
+    .question-number {
+      color: #e94560;
+      font-size: 0.85rem;
+      margin-bottom: 15px;
+    }
+    
+    .question-text {
+      font-size: 1.2rem;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+    
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .option {
+      background: rgba(255,255,255,0.05);
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 15px 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 1rem;
+    }
+    
+    .option:hover {
+      border-color: #e94560;
+      background: rgba(233,69,96,0.1);
+    }
+    
+    .option.selected {
+      border-color: #e94560;
+      background: rgba(233,69,96,0.2);
+    }
+    
+    .option .points {
+      float: right;
+      color: #e94560;
+      font-size: 0.85rem;
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+    
+    .btn {
+      flex: 1;
+      padding: 15px 25px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .btn-prev {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+    
+    .btn-prev:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    .btn-next {
+      background: linear-gradient(90deg, #e94560, #ff6b6b);
+      color: #fff;
+    }
+    
+    .btn-next:hover {
+      opacity: 0.9;
+    }
+    
+    .btn-next:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* 结果页样式 */
+    .result-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 40px;
+      border: 1px solid rgba(255,255,255,0.1);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .result-age {
+      font-size: 5rem;
+      font-weight: bold;
+      background: linear-gradient(90deg, #e94560, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 20px 0;
+    }
+    
+    .result-label {
+      color: #888;
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+    }
+    
+    .result-detail {
+      text-align: left;
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      padding: 25px;
+      margin-top: 30px;
+    }
+    
+    .result-detail h3 {
+      color: #e94560;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+    
+    .result-detail p {
+      color: #aaa;
+      line-height: 1.8;
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+    }
+    
+    .disclaimer {
+      background: rgba(255, 215, 0, 0.1);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 25px;
+      color: #ffd700;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      color: #e94560;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+    
+    .back-link:hover {
+      text-decoration: underline;
+    }
+    
+    /* 响应式 */
+    @media (max-width: 600px) {
+      .header h1 { font-size: 1.5rem; }
+      .question-card { padding: 20px; }
+      .question-text { font-size: 1.1rem; }
+      .result-age { font-size: 3.5rem; }
+      .btn-group { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🧬 测一测你的预计寿命</h1>
+      <p>基于科学研究的生活方式评估，仅供娱乐参考</p>
+    </div>
+    
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+    
+    <div id="quizContainer"></div>
+    
+    <div class="btn-group" id="btnGroup" style="display: none;">
+      <button class="btn btn-prev" id="prevBtn" onclick="prevQuestion()">上一题</button>
+      <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()" disabled>下一题</button>
+    </div>
+  </div>
+  
+  <div id="resultContainer" style="display: none;">
+    <div class="result-card">
+      <p class="result-label">你的预计寿命约为</p>
+      <div class="result-age" id="resultAge">--</div>
+      <p class="result-label">岁</p>
+      
+      <div class="result-detail">
+        <h3>📊 评分说明</h3>
+        <p id="resultDetail"></p>
+      </div>
+      
+      <div class="disclaimer">
+        ⚠️ <strong>免责声明</strong><br>
+        本测试仅供娱乐参考，结果基于统计学研究和一般性假设，不能代表个人的真实健康状况或寿命。实际寿命受多种复杂因素影响，包括医疗进步、个人健康状况、环境因素等。如有健康疑虑，请咨询专业医疗机构。
+      </div>
+      
+      <a href="index.html" class="back-link">← 返回人生倒计时</a>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        category: "饮食方式",
+        question: "你平时的饮食习惯更接近哪种？",
+        options: [
+          { text: "以蔬菜、水果、全谷物为主，少吃肉", points: 10 },
+          { text: "荤素搭配，饮食均衡", points: 7 },
+          { text: "以肉类和加工食品为主", points: 3 },
+          { text: "经常吃快餐、炸物、甜食", points: 0 }
+        ]
+      },
+      {
+        category: "饮食频率",
+        question: "你每天吃几顿饭？是否有规律？",
+        options: [
+          { text: "三餐规律，不暴饮暴食", points: 10 },
+          { text: "基本规律，偶尔不吃早餐", points: 7 },
+          { text: "不规律，经常省略正餐", points: 4 },
+          { text: "经常不吃早饭，晚饭过晚", points: 1 }
+        ]
+      },
+      {
+        category: "遗传因素",
+        question: "你的直系亲属（父母、祖父母）中，有多少位活到了85岁以上？",
+        options: [
+          { text: "3位及以上", points: 10 },
+          { text: "2位", points: 7 },
+          { text: "1位", points: 4 },
+          { text: "都没有或不确定", points: 1 }
+        ]
+      },
+      {
+        category: "运动习惯",
+        question: "你每周进行多少次中等强度以上的运动？",
+        options: [
+          { text: "5次以上，每次30分钟以上", points: 10 },
+          { text: "3-4次", points: 7 },
+          { text: "1-2次", points: 4 },
+          { text: "几乎不运动", points: 0 }
+        ]
+      },
+      {
+        category: "作息睡眠",
+        question: "你每天的睡眠情况如何？",
+        options: [
+          { text: "每晚7-8小时，睡眠质量好", points: 10 },
+          { text: "6-7小时，偶尔失眠", points: 7 },
+          { text: "经常失眠或睡眠不足6小时", points: 3 },
+          { text: "昼夜颠倒，睡眠极不规律", points: 0 }
+        ]
+      },
+      {
+        category: "烟酒习惯",
+        question: "你的吸烟和饮酒习惯是？",
+        options: [
+          { text: "不吸烟，饮酒适量（偶尔小酌）", points: 10 },
+          { text: "不吸烟，偶尔大量饮酒", points: 6 },
+          { text: "每天少量吸烟或每天饮酒", points: 3 },
+          { text: "吸烟量大或经常醉酒", points: 0 }
+        ]
+      },
+      {
+        category: "心理压力",
+        question: "你平时感受到的压力水平如何？",
+        options: [
+          { text: "压力较小，能有效调节", points: 10 },
+          { text: "适度压力，生活愉快", points: 7 },
+          { text: "经常感到压力较大", points: 4 },
+          { text: "长期高压，焦虑抑郁", points: 0 }
+        ]
+      },
+      {
+        category: "社交关系",
+        question: "你与家人、朋友的社交关系如何？",
+        options: [
+          { text: "关系亲密，经常联系", points: 10 },
+          { text: "有稳定的朋友圈", points: 7 },
+          { text: "较少社交，独处较多", points: 4 },
+          { text: "几乎没有什么社交联系", points: 0 }
+        ]
+      },
+      {
+        category: "医疗保健",
+        question: "你多久进行一次体检？",
+        options: [
+          { text: "每年一次常规体检", points: 10 },
+          { text: "2-3年一次", points: 6 },
+          { text: "很久没体检了", points: 3 },
+          { text: "从不体检", points: 0 }
+        ]
+      },
+      {
+        category: "生活环境",
+        question: "你长期生活的环境空气质量如何？",
+        options: [
+          { text: "空气清新，接近自然", points: 10 },
+          { text: "一般城市，空气还行", points: 6 },
+          { text: "空气污染较严重", points: 3 },
+          { text: "工业区或长期雾霾地区", points: 0 }
+        ]
+      }
+    ];
+
+    let currentQuestion = 0;
+    let answers = new Array(questions.length).fill(null);
+    let totalPoints = 0;
+
+    function renderQuestion() {
+      const q = questions[currentQuestion];
+      const container = document.getElementById('quizContainer');
+      
+      let optionsHtml = q.options.map((opt, idx) => `
+        <div class="option ${answers[currentQuestion] === idx ? 'selected' : ''}" onclick="selectOption(${idx})">
+          ${opt.text}
+          <span class="points">+${opt.points}分</span>
+        </div>
+      `).join('');
+      
+      container.innerHTML = `
+        <div class="question-card">
+          <div class="question-number">第 ${currentQuestion + 1} / ${questions.length} 题 · ${q.category}</div>
+          <div class="question-text">${q.question}</div>
+          <div class="options">${optionsHtml}</div>
+        </div>
+      `;
+      
+      // 更新进度条
+      document.getElementById('progressFill').style.width = 
+        ((currentQuestion + 1) / questions.length * 100) + '%';
+      
+      // 更新按钮
+      const btnGroup = document.getElementById('btnGroup');
+      btnGroup.style.display = 'flex';
+      document.getElementById('prevBtn').style.visibility = currentQuestion === 0 ? 'hidden' : 'visible';
+      
+      const nextBtn = document.getElementById('nextBtn');
+      if (currentQuestion === questions.length - 1) {
+        nextBtn.textContent = '查看结果';
+      } else {
+        nextBtn.textContent = '下一题';
+      }
+      
+      nextBtn.disabled = answers[currentQuestion] === null;
+    }
+
+    function selectOption(idx) {
+      answers[currentQuestion] = idx;
+      renderQuestion();
+    }
+
+    function nextQuestion() {
+      if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        renderQuestion();
+      }
+    }
+
+    function showResult() {
+      // 计算总分
+      totalPoints = 0;
+      for (let i = 0; i < answers.length; i++) {
+        if (answers[i] !== null) {
+          totalPoints += questions[i].options[answers[i]].points;
+        }
+      }
+      
+      // 转换为年龄（满分100分，对应约85岁；最低0分对应约60岁）
+      // 使用线性插值: age = 60 + (totalPoints / 100) * 25
+      // 但加入一些随机因素让结果更有趣
+      const baseAge = 65;
+      const maxBonus = 28;
+      const scoreRatio = totalPoints / 100;
+      let resultAge = Math.round(baseAge + scoreRatio * maxBonus);
+      
+      // 添加小幅随机波动（±2岁）
+      resultAge += Math.floor(Math.random() * 5) - 2;
+      
+      // 确保结果在合理范围
+      resultAge = Math.max(55, Math.min(95, resultAge));
+      
+      // 显示结果
+      document.getElementById('quizContainer').style.display = 'none';
+      document.getElementById('btnGroup').style.display = 'none';
+      document.getElementById('resultContainer').style.display = 'block';
+      document.getElementById('resultAge').textContent = resultAge;
+      
+      // 生成详细说明
+      const maxScore = questions.length * 10;
+      const percentage = Math.round((totalPoints / maxScore) * 100);
+      
+      let level, description;
+      if (percentage >= 85) {
+        level = "🌟 优秀";
+        description = "你的生活习惯非常健康！多项研究表明，拥有良好生活方式的人平均寿命比一般人多10-15年。继续保持！";
+      } else if (percentage >= 70) {
+        level = "👍 良好";
+        description = "你的生活习惯总体不错，寿命预期在正常范围内。可以在某些方面进一步改善，比如增加运动或改善饮食。";
+      } else if (percentage >= 50) {
+        level = "⚠️ 一般";
+        description = "你的生活习惯存在一些风险因素。建议重点改善一两个方面，如增加运动、戒烟限酒或改善睡眠质量。";
+      } else {
+        level = "🔴 需注意";
+        description = "你的生活方式可能对健康有较大影响。建议从现在开始逐步改善生活习惯，每一次小的改变都会对寿命产生积极影响。";
+      }
+      
+      document.getElementById('resultDetail').innerHTML = `
+        ${level}（得分：${totalPoints}/${maxScore}，超过${percentage}%的测试者）<br><br>
+        ${description}
+      `;
+      
+      document.getElementById('progressFill').style.width = '100%';
+    }
+
+    // 初始化
+    renderQuestion();
+  </script>
+</body>
+</html>
