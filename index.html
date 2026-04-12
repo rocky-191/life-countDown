@@ -173,12 +173,78 @@
       font-size: 0.9rem;
     }
     
-    @media (max-width: 600px) {
-      h1 { font-size: 1.8rem; }
-      .main-result { font-size: 2.5rem; }
-      .stats-grid { grid-template-columns: 1fr; gap: 15px; }
-      .input-group { flex-direction: column; gap: 20px; }
-      .input-section { padding: 25px 20px; }
+    /* 平板适配 */
+    @media (max-width: 768px) {
+      body { padding: 30px 15px; }
+      h1 { font-size: 2rem; }
+      .subtitle { margin-bottom: 30px; }
+      .input-section { padding: 25px 30px; margin-bottom: 30px; }
+      .input-group { gap: 20px; }
+      .main-result { font-size: 3rem; }
+      .main-label { margin-bottom: 25px; }
+      .stats-grid { gap: 15px; }
+      .stat-card { padding: 20px 12px; }
+      .stat-value { font-size: 1.6rem; }
+      .progress-section { margin-top: 30px; }
+      .tips { margin-top: 40px; padding: 16px; font-size: 0.85rem; }
+    }
+
+    /* 手机适配 */
+    @media (max-width: 480px) {
+      body { padding: 20px 12px; }
+      h1 { font-size: 1.6rem; }
+      .subtitle { font-size: 0.9rem; margin-bottom: 25px; }
+      .input-section {
+        padding: 20px;
+        margin-bottom: 25px;
+        border-radius: 16px;
+      }
+      .input-group {
+        flex-direction: column;
+        gap: 15px;
+      }
+      .input-item input {
+        width: 100px;
+        height: 44px;
+        font-size: 1.3rem;
+      }
+      .input-item label { font-size: 0.85rem; }
+      .main-result { font-size: 2.2rem; }
+      .main-label { font-size: 1rem; margin-bottom: 20px; }
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        max-width: 280px;
+        margin: 0 auto;
+      }
+      .stat-card {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        padding: 15px 20px;
+        flex-direction: row;
+      }
+      .stat-value { font-size: 1.5rem; }
+      .stat-label { margin-top: 0; font-size: 0.9rem; }
+      .progress-section { margin-top: 25px; }
+      .progress-label { font-size: 0.85rem; }
+      .tips {
+        margin-top: 30px;
+        padding: 14px;
+        font-size: 0.8rem;
+        max-width: 100%;
+      }
+    }
+
+    /* 大屏幕优化 */
+    @media (min-width: 1200px) {
+      h1 { font-size: 3rem; }
+      .main-result { font-size: 5rem; }
+      .stats-grid { max-width: 700px; gap: 30px; }
+      .stat-value { font-size: 2.5rem; }
+      .input-section { padding: 40px 50px; }
+      .tips { max-width: 600px; font-size: 1rem; }
     }
   </style>
 </head>
