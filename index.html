@@ -229,8 +229,7 @@
     </div>
   </div>
   
-  <div class="tips">
-    💡 记住：今天是你余生中最年轻的一天
+  <div class="tips" id="tips">
   </div>
 
   <script>
@@ -269,6 +268,36 @@
     currentAgeInput.addEventListener('input', calculate);
     deathAgeInput.addEventListener('input', calculate);
     
+    const quotes = [
+      { text: "你热爱生命吗？那就别浪费时间，因为时间是生命的组成材料。", author: "本杰明·富兰克林（美国）" },
+      { text: "盛年不重来，一日难再晨。及时当勉励，岁月不待人。", author: "陶渊明（东晋）" },
+      { text: "人的一生是有限的，而无知却是无限的。", author: "笛卡尔（法国）" },
+      { text: "时间就像海绵里的水，只要愿挤，总还是有的。", author: "鲁迅（中国）" },
+      { text: "生命并不是以时间来衡量的，而是以深度来衡量的。", author: "梭罗（美国）" },
+      { text: "三更灯火五更鸡，正是男儿读书时。黑发不知勤学早，白首方悔读书迟。", author: "颜真卿（唐）" },
+      { text: "把每一个黎明看作是生命的开始，把每一个黄昏看作是你生命的小结。", author: "约翰·罗斯金（英国）" },
+      { text: "不要等待，时机永远不会恰到好处。", author: "拿破仑·希尔（美国）" },
+      { text: "人生天地之间，若白驹过隙，忽然而已。", author: "庄子（战国）" },
+      { text: "你生命中的每一天，都是唯一的一天。", author: "弗吉尼亚·伍尔夫（英国）" },
+      { text: "抛弃时间的人，时间也抛弃他。", author: "莎士比亚（英国）" },
+      { text: "明日复明日，明日何其多！我生待明日，万事成蹉跎。", author: "钱福（明）" },
+      { text: "人生苦短，及时行乐。", author: "塞内卡（古罗马）" },
+      { text: "最浪费不起的是时间。", author: "丁玲（中国）" },
+      { text: "凡事若能按时做，比什么和时间赛跑都更有成效。", author: "赫伯特（英国）" },
+      { text: "少年易老学难成，一寸光阴不可轻。", author: "朱熹（宋）" },
+      { text: "生命不等于是呼吸，生命是有动作的。", author: "伏尔泰（法国）" },
+      { text: "没有人会感觉到，青春正在消逝，但任何人都会感觉到，青春已经消逝。", author: "小塞涅卡（古罗马）" },
+      { text: "时间是一只永远在飞翔的鸟。", author: "梭罗（美国）" },
+      { text: "浪费时间叫虚度，利用时间叫生活。", author: "爱因斯坦（美国）" }
+    ];
+
+    function showRandomQuote() {
+      const random = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById('tips').innerHTML = `💡 ${random.text}<br><span style="font-size:0.8rem;color:#aaa">—— ${random.author}</span>`;
+    }
+
+    showRandomQuote();
+
     // 默认值
     currentAgeInput.value = 30;
     deathAgeInput.value = 80;
