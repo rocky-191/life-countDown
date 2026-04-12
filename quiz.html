@@ -209,6 +209,81 @@
       line-height: 1.6;
     }
     
+    /* 关怀弹窗 */
+    .caring-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    
+    .caring-content {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      border: 1px solid rgba(233, 69, 96, 0.3);
+      border-radius: 24px;
+      padding: 40px 35px;
+      max-width: 420px;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    .caring-icon {
+      font-size: 3.5rem;
+      margin-bottom: 15px;
+    }
+    
+    .caring-content h2 {
+      color: #e94560;
+      font-size: 1.5rem;
+      margin-bottom: 25px;
+    }
+    
+    .caring-text {
+      color: #bbb;
+      font-size: 0.95rem;
+      line-height: 1.9;
+      margin-bottom: 15px;
+    }
+    
+    .caring-highlight {
+      color: #fff;
+      font-size: 1rem;
+      margin-top: 20px;
+    }
+    
+    .caring-btn {
+      margin-top: 25px;
+      padding: 14px 35px;
+      background: linear-gradient(90deg, #e94560, #ff6b6b);
+      border: none;
+      border-radius: 25px;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    
+    .caring-btn:hover { opacity: 0.9; }
+    
+    @media (max-width: 480px) {
+      .caring-content { padding: 30px 20px; }
+      .caring-icon { font-size: 2.5rem; }
+      .caring-content h2 { font-size: 1.3rem; }
+      .caring-text { font-size: 0.9rem; }
+    }
+    
     .back-link {
       display: inline-block;
       margin-top: 25px;
@@ -267,6 +342,28 @@
       </div>
       
       <a href="index.html" class="back-link">← 返回人生倒计时</a>
+    </div>
+  </div>
+  
+  <!-- 关怀弹窗 -->
+  <div id="caringModal" class="caring-modal" style="display: none;">
+    <div class="caring-content">
+      <div class="caring-icon">💚</div>
+      <h2>给在乎的你</h2>
+      <p class="caring-text">
+        测试结果显示，你的身体可能在发出一些信号。<br>
+        也许你一直在忙碌，也许你习惯了忍耐，<br>
+        但请相信——<strong>你值得被好好对待</strong>。
+      </p>
+      <p class="caring-text">
+        从今天开始，试着多走几步路，多喝一杯水，<br>
+        多给自己一些睡眠，多给生活一点喘息的空间。
+      </p>
+      <p class="caring-text caring-highlight">
+        你不只是身上的这副躯壳，你是值得被珍爱的存在。<br>
+        改变，从最小的第一步开始。
+      </p>
+      <button class="caring-btn" onclick="closeCaringModal()">我会好好的 💪</button>
     </div>
   </div>
 
@@ -511,6 +608,21 @@
       `;
       
       document.getElementById('progressFill').style.width = '100%';
+      
+      // 如果结果年龄 <= 60，弹出关怀弹窗
+      if (resultAge <= 60) {
+        showCaringModal(resultAge);
+      }
+    }
+    
+    function showCaringModal(age) {
+      const modal = document.getElementById('caringModal');
+      modal.style.display = 'flex';
+      document.getElementById('caringAge').textContent = age;
+    }
+    
+    function closeCaringModal() {
+      document.getElementById('caringModal').style.display = 'none';
     }
 
     // 初始化
